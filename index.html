@@ -7,23 +7,23 @@
  SETUP (everything the app needs is inside this one file)
  1. console.firebase.google.com > create project.
  2. Build > Firestore Database > Create database (production mode).
- 3. (Optional) Authentication > Sign-in method > Anonymous > Enable.
-    The app does NOT use Firebase login. It has its own login screen.
+ 3. Build > Authentication > Sign-in method > Email/Password > Enable.
+    Users tab > Add user. The app shows a USERNAME box, so for each
+    person type:  <username>@stankells.app  as the email, plus a password.
+      Admin example:  Email: admin@stankells.app   Password: (your own)
+      Staff example:  Email: akosua@stankells.app  Password: (your own)
+    They then log in with just  admin  /  akosua  and the password.
  4. Project settings > Your apps > Web app > copy firebaseConfig and
     paste it into the firebaseConfig line near the bottom of this file.
- 5. Firestore > Rules tab > paste ONE of these and Publish:
-    (A) works immediately, no extra step:
-        rules_version = '2';
-        service cloud.firestore { match /databases/{d}/documents {
-          match /{document=**} { allow read, write: if true; } } }
-    (B) slightly safer (needs Anonymous sign-in enabled in step 3):
-        rules_version = '2';
-        service cloud.firestore { match /databases/{d}/documents {
-          match /{document=**} { allow read, write: if request.auth != null; } } }
+ 5. Firestore > Rules tab > paste these rules and Publish:
 
- FIRST LOGIN:  username  stankells   password  SK-Digitals#4827
- The app asks you to choose your own username/password straight away.
- Change them anytime with "Change password" at the top.
+    rules_version = '2';
+    service cloud.firestore {
+      match /databases/{database}/documents {
+        match /{document=**} { allow read, write: if request.auth != null; }
+      }
+    }
+
  6. Save this file as  public/index.html  then run:
       npm install -g firebase-tools
       firebase login
@@ -161,7 +161,7 @@ async function restock(id){const q=+prompt('Quantity to add:');if(q>0){const it=
 const rows=snap=>snap.docs.map(d=>({id:d.id,...d.data()}));
 window.start=function(adapter){
  db=adapter;
- $('#st').innerHTML='● Live: shared across all devices &nbsp; <a href="#" onclick="window.changePw(false);return false">Change password</a> &nbsp;|&nbsp; <a href="#" onclick="window.logout();return false">Log out</a>';
+ $('#st').innerHTML='● Live: shared across all devices &nbsp; <a href="#" onclick="window.logout();return false">Log out</a>';
  const err=e=>{$('#st').textContent='Sync problem: '+(e&&e.message||'')};
  col('stock').onSnapshot(s=>{S=rows(s);soft()},err);
  col('customers').onSnapshot(s=>{C=rows(s);soft()},err);
@@ -176,8 +176,8 @@ render();
  <button class="btn p" id="lg" style="width:100%">Log in</button><p id="le" style="color:var(--pink)"></p><small>Developed by SOMEFOST SOLUTIONS</small></div></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {initializeFirestore,persistentLocalCache,collection,doc,addDoc,updateDoc,onSnapshot,getDoc,setDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import {getAuth,signInAnonymously} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {initializeFirestore,persistentLocalCache,collection,doc,addDoc,updateDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 // >>> PASTE YOUR FIREBASE CONFIG HERE (Firebase console > Project settings > Your apps > Web app) <<<
 const firebaseConfig={apiKey: "AIzaSyBckEwUfDdORZ7IPPiPXNqyC_EbZmucvbk",
   authDomain: "stan-kells-shop.firebaseapp.com",
@@ -186,40 +186,16 @@ const firebaseConfig={apiKey: "AIzaSyBckEwUfDdORZ7IPPiPXNqyC_EbZmucvbk",
   messagingSenderId: "474291225893",
   appId: "1:474291225893:web:d47a9566537044f5f646cc",
   measurementId: "G-HYHK78Q613"};
-// FIRST-TIME LOGIN (change it right after you log in):
-const DEFAULT_USER="stankells", DEFAULT_PASS="SK-Digitals#4827";
-const app=initializeApp(firebaseConfig);
-try{signInAnonymously(getAuth(app)).catch(()=>{})}catch(e){} // silent; only needed if your rules require it
+const app=initializeApp(firebaseConfig),auth=getAuth(app);
 const fs=initializeFirestore(app,{localCache:persistentLocalCache()});
 const adapter={collection:n=>({
  add:d=>addDoc(collection(fs,n),d),
  doc:id=>({update:d=>updateDoc(doc(fs,n,id),d)}),
  onSnapshot:(f,e)=>onSnapshot(collection(fs,n),s=>f({docs:s.docs}),e)})};
-const $$=id=>document.getElementById(id);
-const sha=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))].map(b=>b.toString(16).padStart(2,'0')).join('');
-const getAdmin=async()=>{const s=await getDoc(doc(fs,'settings','admin'));return s.exists()?s.data():null};
-const mem=(k,v)=>{try{v===undefined?localStorage.removeItem(k):v===null?0:localStorage.setItem(k,v);return localStorage.getItem(k)}catch(e){return null}};
+window.logout=()=>signOut(auth).then(()=>location.reload());
+const go=()=>signInWithEmailAndPassword(auth,document.getElementById('em').value.trim().toLowerCase().replace(/[^a-z0-9._-]/g,'')+'@stankells.app',document.getElementById('pw').value).catch(()=>{document.getElementById('le').textContent='Wrong username or password'});
+document.getElementById('lg').onclick=go;
+document.getElementById('pw').onkeydown=e=>{if(e.key==='Enter')go()};
 let started=false;
-function enter(){$$('login').style.display='none';if(!started){started=true;window.start(adapter)}}
-window.logout=()=>{mem('skd_ok',undefined);location.reload()};
-window.changePw=async(force)=>{
- try{const a=await getAdmin();
-  if(!force){const o=prompt('Enter your CURRENT password:');if(!o)return;
-   const okc=a?(await sha(a.salt+o))===a.hash:o===DEFAULT_PASS;if(!okc)return alert('Current password is wrong.')}
-  const u=(prompt('Choose your username:',a?a.user:DEFAULT_USER)||'').trim().toLowerCase();if(!u)return;
-  const n=prompt('Choose a NEW password (at least 8 characters):');if(!n||n.length<8)return alert('Password must be at least 8 characters.');
-  if(n!==prompt('Type the new password again:'))return alert('Passwords did not match.');
-  const salt=crypto.randomUUID();
-  await setDoc(doc(fs,'settings','admin'),{user:u,salt,hash:await sha(salt+n)});
-  mem('skd_ok',u);alert('Saved. Use the new username and password next time you log in.');
- }catch(e){alert('Could not save. Check your internet connection.')}};
-const go=async()=>{
- const u=$$('em').value.trim().toLowerCase(),p=$$('pw').value;$$('le').textContent='';
- try{const a=await getAdmin();let ok,first=false;
-  if(!a){ok=u===DEFAULT_USER&&p===DEFAULT_PASS;first=ok}else ok=u===a.user&&(await sha(a.salt+p))===a.hash;
-  if(!ok){$$('le').textContent='Wrong username or password';return}
-  mem('skd_ok',u);enter();if(first)setTimeout(()=>window.changePw(true),400);
- }catch(e){$$('le').textContent='Cannot reach the database. Check internet and your Firebase config.'}};
-$$('lg').onclick=go;$$('pw').onkeydown=e=>{if(e.key==='Enter')go()};
-if(mem('skd_ok',null))enter();
+onAuthStateChanged(auth,u=>{if(u){document.getElementById('login').style.display='none';if(!started){started=true;window.start(adapter)}}else document.getElementById('login').style.display='flex'});
 </script></body></html>
