@@ -95,7 +95,7 @@ function dash(){
  <div class="card"><h2>Overdue payments</h2>${od.length?od.map(s=>`${esc(cust(s.cid).name)} (${esc(cust(s.cid).phone)}) owes <b>${M(bal(s))}</b>, was due ${s.due}<br>`).join(''):'None.'}</div>`;
 }
 function sale(){
- const opts=S.map(i=>`<option value="${i.id}">${esc(i.name)} — ${M(i.price)} (${i.qty} in stock)</option>`).join('');
+ const opts=CATS.map(c=>{const L=S.filter(i=>i.cat===c).sort((a,b)=>a.name.localeCompare(b.name));return L.length?`<optgroup label="${c}">`+L.map(i=>`<option value="${i.id}">${esc(i.name)} — ${M(i.price)} (${i.qty} in stock)</option>`).join('')+'</optgroup>':''}).join('');
  return `<div class="card"><h2>New Sale / Credit</h2>
  <label>Customer</label><select onchange="F.cid=this.value"><option value="">-- select customer --</option>${C.map(c=>`<option value="${c.id}" ${F.cid==c.id?'selected':''}>${esc(c.name)} (${esc(c.phone)})</option>`).join('')}</select>
  <label>Items bought</label>${lines.map((l,i)=>`<div class="line"><select onchange="lines[${i}].id=this.value"><option value="">-- item --</option>${opts.replace(`value="${l.id}"`,`value="${l.id}" selected`)}</select><input type="number" min="1" value="${l.q||1}" onchange="lines[${i}].q=+this.value"><button class="btn s p" onclick="lines.splice(${i},1);if(!lines.length)lines=[{}];render()">✕</button></div>`).join('')}
@@ -149,17 +149,117 @@ function custs(){
 }
 async function addC(){const n=$('#cn').value.trim(),p=$('#cp').value.trim(),l=$('#cl').value.trim();if(!n||!p)return alert('Name and phone are required.');
  try{await col('customers').add({name:n,phone:p,loc:l,ts:Date.now()});$('#cn').value=$('#cp').value=$('#cl').value=''}catch(e){alert('Could not save: '+(e.message||e.code))}}
-const SEED=[["CCTV Dome Camera 2MP","CCTV & Security",20,180],["CCTV Bullet Camera 5MP","CCTV & Security",15,260],["4-Channel DVR","CCTV & Security",8,420],["8-Channel NVR","CCTV & Security",6,780],["Hard Disk 1TB (Surveillance)","CCTV & Security",10,350],["BNC/DC Connectors (pair)","CCTV Accessories",80,6],["Camera Power Adapter 12V","CCTV Accessories",30,35],["CCTV Power Supply Box","CCTV Accessories",12,120],["Smart TV 43\"","Electronics",5,2100],["Home Theatre System","Electronics",4,950],["Phone Charger","Electronics",40,45],["Electric Standing Fan","Electrical Appliances",12,320],["Electric Iron","Electrical Appliances",15,110],["Blender","Electrical Appliances",10,180],["Electric Kettle","Electrical Appliances",14,95],["Cable 1.5mm (roll 100m)","Wiring & Cables",25,260],["Cable 2.5mm (roll 100m)","Wiring & Cables",20,390],["Cable 4mm (roll 100m)","Wiring & Cables",10,620],["Extension Socket","Wiring & Cables",35,55],["CAT6 Network Cable (305m)","Wiring & Cables",6,650]];
-async function seed(){try{await Promise.all(SEED.map(a=>col('stock').add({name:a[0],cat:a[1],qty:a[2],price:a[3]})))}catch(e){alert('Could not save: '+(e.message||e.code))}}
+const CATS=["CCTV & Security","CCTV Accessories","Electronics","Fans","Electrical Appliances","Wiring & Cables"];
+const CAT_TXT=`Hikvision 2MP Dome Camera|CCTV & Security|190
+Hikvision 5MP Bullet Camera|CCTV & Security|290
+Dahua 2MP Dome Camera|CCTV & Security|180
+Dahua 5MP Bullet Camera|CCTV & Security|280
+Wireless WiFi Camera (indoor)|CCTV & Security|220
+Solar Powered 4G Camera|CCTV & Security|950
+PTZ Speed Dome Camera|CCTV & Security|1100
+Hikvision 16-Channel DVR|CCTV & Security|750
+Dahua 16-Channel NVR|CCTV & Security|1250
+Full CCTV Kit (4 cameras + DVR)|CCTV & Security|1800
+Full CCTV Kit (8 cameras + DVR)|CCTV & Security|3300
+Video Doorbell Camera|CCTV & Security|420
+Alarm System with Sensors|CCTV & Security|650
+Fingerprint Door Access Control|CCTV & Security|580
+Intercom Set|CCTV & Security|480
+2TB Surveillance Hard Disk|CCTV & Security|520
+RG59 Siamese Cable (100m)|CCTV Accessories|280
+Video Balun (pair)|CCTV Accessories|25
+Camera Wall Bracket|CCTV Accessories|20
+Camera Junction Box|CCTV Accessories|15
+PoE Switch 8-Port|CCTV Accessories|380
+CCTV Monitor 19"|CCTV Accessories|850
+12V 10A Power Supply|CCTV Accessories|150
+DC Pigtail Connector|CCTV Accessories|5
+HDMI Cable 5m|CCTV Accessories|45
+Nasco Standing Fan 18"|Fans|330
+Midea Standing Fan 16"|Fans|290
+Binatone Standing Fan 16"|Fans|310
+Von Hotpoint Standing Fan 18"|Fans|340
+Sayona Standing Fan 18"|Fans|320
+Hisense Standing Fan 18"|Fans|350
+Pensonic Standing Fan 16"|Fans|280
+Crompton Standing Fan 18"|Fans|360
+LG Standing Fan 16"|Fans|380
+Rechargeable Standing Fan|Fans|420
+Nasco Ceiling Fan 56"|Fans|390
+Midea Ceiling Fan 56"|Fans|370
+Binatone Ceiling Fan 56"|Fans|380
+Von Hotpoint Ceiling Fan 56"|Fans|400
+Crompton Ceiling Fan 48"|Fans|360
+Crompton Ceiling Fan 56"|Fans|410
+Usha Ceiling Fan 56"|Fans|420
+Orbit Ceiling Fan 56"|Fans|390
+Pensonic Ceiling Fan 56"|Fans|380
+Sayona Ceiling Fan 56"|Fans|370
+Nasco Table Fan 12"|Fans|180
+Midea Wall Fan 16"|Fans|260
+Extractor Fan (bathroom)|Fans|130
+LG 43" Smart TV|Electronics|2400
+Samsung 43" Smart TV|Electronics|2500
+Hisense 32" LED TV|Electronics|1100
+Nasco 32" LED TV|Electronics|950
+Sound Bar|Electronics|700
+Bluetooth Speaker|Electronics|180
+Free-to-Air Decoder|Electronics|250
+Power Bank 20000mAh|Electronics|180
+Rechargeable Lamp|Electronics|90
+Voltage Stabilizer 2000VA|Electronics|520
+Inverter 1.5KVA|Electronics|2600
+Wireless Router|Electronics|250
+LG Refrigerator 200L|Electrical Appliances|3200
+Hisense Chest Freezer 300L|Electrical Appliances|3600
+Midea Microwave 20L|Electrical Appliances|850
+Rice Cooker 1.8L|Electrical Appliances|220
+Gas Cooker 4-Burner|Electrical Appliances|1400
+Washing Machine 7kg|Electrical Appliances|3400
+Split Air Conditioner 1.5HP|Electrical Appliances|3800
+Water Dispenser|Electrical Appliances|950
+Air Fryer|Electrical Appliances|650
+Sandwich Maker|Electrical Appliances|150
+Electric Hot Plate|Electrical Appliances|180
+Food Processor|Electrical Appliances|420
+Cable 6mm (roll 100m)|Wiring & Cables|880
+Cable 10mm (roll 100m)|Wiring & Cables|1350
+Flexible Cable 3-Core 1.5mm (roll)|Wiring & Cables|420
+Flexible Cable 3-Core 2.5mm (roll)|Wiring & Cables|650
+Armoured Cable 4-Core (per metre)|Wiring & Cables|65
+Single Socket Outlet|Wiring & Cables|18
+Double Socket Outlet|Wiring & Cables|28
+Light Switch 1-Gang|Wiring & Cables|12
+Light Switch 2-Gang|Wiring & Cables|18
+LED Bulb 9W|Wiring & Cables|12
+LED Bulb 15W|Wiring & Cables|20
+Floodlight 100W|Wiring & Cables|120
+Circuit Breaker 20A|Wiring & Cables|35
+Distribution Board 8-Way|Wiring & Cables|260
+Conduit Pipe 20mm|Wiring & Cables|6
+PVC Trunking 50mm|Wiring & Cables|14
+Electrical Tape|Wiring & Cables|3
+13A Plug Top|Wiring & Cables|8`;
+const SEED=CAT_TXT.split('\n').map(l=>{const a=l.split('|');return [a[0],a[1],10,+a[2]]});
+async function seed(){
+ const have=new Set(S.map(i=>i.name.toLowerCase())),add=SEED.filter(a=>!have.has(a[0].toLowerCase()));
+ if(!add.length)return alert('All catalogue products are already in your stock.');
+ if(!confirm('Add '+add.length+' products (quantity 10 each, prices are estimates you can edit)?'))return;
+ try{await Promise.all(add.map(a=>col('stock').add({name:a[0],cat:a[1],qty:a[2],price:a[3]})))}catch(e){alert('Could not save: '+(e.message||e.code))}}
+let editId=null,q='';
+const stRow=i=>i.id===editId?`<tr style="background:var(--soft)"><td><input id="en" value="${esc(i.name)}"></td><td><select id="ec">${CATS.map(c=>`<option ${c===i.cat?'selected':''}>${c}</option>`).join('')}</select></td><td><input id="ep" type="number" step="0.01" min="0" value="${i.price}"></td><td><input id="eq" type="number" min="0" value="${i.qty}"></td><td style="white-space:nowrap"><button class="btn s p" onclick="saveE('${i.id}')">Save</button> <button class="btn s" onclick="editId=null;render()">Cancel</button> <button class="btn s" style="background:#999" onclick="delE('${i.id}')">Delete</button></td></tr>`
+:`<tr><td>${esc(i.name)}</td><td>${esc(i.cat)}</td><td>${M(i.price)}</td><td>${i.qty<=5?`<span class="tag r">${i.qty} low</span>`:i.qty}</td><td style="white-space:nowrap"><button class="btn s" onclick="editId='${i.id}';render()">Edit</button> <button class="btn s p" onclick="restock('${i.id}')">Restock</button></td></tr>`;
+const stRows=()=>`<table><tr><th>Item</th><th>Category</th><th>Price</th><th>Qty</th><th></th></tr>${[...S].filter(i=>(i.name+' '+i.cat).toLowerCase().includes(q.toLowerCase())).sort((a,b)=>a.cat.localeCompare(b.cat)||a.name.localeCompare(b.name)).map(stRow).join('')||'<tr><td colspan="5">No products found.</td></tr>'}</table>`;
 function stockV(){
- const cats=["CCTV & Security","CCTV Accessories","Electronics","Electrical Appliances","Wiring & Cables"];
- return `${S.length?'':'<div class="card"><h2>Stock is empty</h2><button class="btn p" onclick="seed()">Load starter stock (CCTV, appliances, cables…)</button></div>'}
- <div class="card"><h2>Add Stock Item</h2><div class="row"><div><label>Item name</label><input id="in"></div><div><label>Category</label><select id="ic">${cats.map(c=>`<option>${c}</option>`).join('')}</select></div><div><label>Quantity</label><input id="iq" type="number" min="0"></div><div><label>Unit price (GH₵)</label><input id="ip" type="number" min="0"></div></div><button class="btn p" onclick="addI()">Add to Stock</button></div>
- <div class="card"><h2>Stock</h2><div class="tw"><table><tr><th>Item</th><th>Category</th><th>Price</th><th>Qty</th><th></th></tr>${[...S].sort((a,b)=>a.cat.localeCompare(b.cat)).map(i=>`<tr><td>${esc(i.name)}</td><td>${esc(i.cat)}</td><td>${M(i.price)}</td><td>${i.qty<=5?`<span class="tag r">${i.qty} low</span>`:i.qty}</td><td><button class="btn s" onclick="restock('${i.id}')">Restock</button></td></tr>`).join('')}</table></div></div>`;
+ return `<div class="card"><h2>Add Stock Item</h2><div class="row"><div><label>Item name</label><input id="in"></div><div><label>Category</label><select id="ic">${CATS.map(c=>`<option>${c}</option>`).join('')}</select></div><div><label>Quantity</label><input id="iq" type="number" min="0"></div><div><label>Unit price (GH₵)</label><input id="ip" type="number" min="0"></div></div><button class="btn p" onclick="addI()">Add to Stock</button> <button class="btn" onclick="seed()">Add extended catalogue (fans, CCTV, appliances, cables…)</button></div>
+ <div class="card"><h2>Stock — tap Edit to change a name, price or quantity</h2><input placeholder="Search products or category…" value="${esc(q)}" oninput="q=this.value;document.getElementById('stl').innerHTML=stRows()"><div class="tw" id="stl" style="margin-top:8px">${stRows()}</div></div>`;
 }
-async function addI(){const n=$('#in').value.trim(),q=+$('#iq').value,p=+$('#ip').value;if(!n||!p)return alert('Name and price required.');
- try{await col('stock').add({name:n,cat:$('#ic').value,qty:q||0,price:p})}catch(e){alert('Could not save: '+(e.message||e.code))}}
-async function restock(id){const q=+prompt('Quantity to add:');if(q>0){const it=S.find(i=>i.id==id);try{await col('stock').doc(id).update({qty:it.qty+q})}catch(e){alert('Could not save')}}}
+async function addI(){const n=$('#in').value.trim(),qq=+$('#iq').value,p=+$('#ip').value;if(!n||!p)return alert('Name and price required.');
+ try{await col('stock').add({name:n,cat:$('#ic').value,qty:qq||0,price:p})}catch(e){alert('Could not save: '+(e.message||e.code))}}
+async function saveE(id){const n=$('#en').value.trim(),p=+$('#ep').value,qq=+$('#eq').value;if(!n||!(p>=0))return alert('Enter a name and a valid price.');
+ try{await col('stock').doc(id).update({name:n,cat:$('#ec').value,price:p,qty:Math.max(0,qq||0)});editId=null;render()}catch(e){alert('Could not save: '+(e.message||e.code))}}
+async function delE(id){if(!confirm('Delete this product? Past sales are not affected.'))return;try{await col('stock').doc(id).delete();editId=null;render()}catch(e){alert('Could not delete')}}
+async function restock(id){const qq=+prompt('Quantity to add:');if(qq>0){const it=S.find(i=>i.id==id);try{await col('stock').doc(id).update({qty:it.qty+qq})}catch(e){alert('Could not save')}}}
 const rows=snap=>snap.docs.map(d=>({id:d.id,...d.data()}));
 window.start=function(adapter){
  db=adapter;
@@ -178,7 +278,7 @@ render();
  <button class="btn p" id="lg" style="width:100%">Log in</button><p id="le" style="color:var(--pink)"></p><small>Developed by SOMEFOST SOLUTIONS</small></div></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {initializeFirestore,persistentLocalCache,collection,doc,addDoc,updateDoc,onSnapshot,getDoc,setDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {initializeFirestore,persistentLocalCache,collection,doc,addDoc,updateDoc,onSnapshot,getDoc,setDoc,deleteDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {getAuth,signInAnonymously} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 // >>> PASTE YOUR FIREBASE CONFIG HERE (Firebase console > Project settings > Your apps > Web app) <<<
 const firebaseConfig={apiKey: "AIzaSyBckEwUfDdORZ7IPPiPXNqyC_EbZmucvbk",
@@ -196,13 +296,13 @@ if(!LOCAL)try{signInAnonymously(getAuth(app)).catch(()=>{})}catch(e){} // silent
 const fs=LOCAL?null:initializeFirestore(app,{localCache:persistentLocalCache()});
 const fbAdapter={collection:n=>({
  add:d=>addDoc(collection(fs,n),d),
- doc:id=>({update:d=>updateDoc(doc(fs,n,id),d)}),
+ doc:id=>({update:d=>updateDoc(doc(fs,n,id),d),delete:()=>deleteDoc(doc(fs,n,id))}),
  onSnapshot:(f,e)=>onSnapshot(collection(fs,n),s=>f({docs:s.docs}),e)})};
 const subs={},ld=n=>{try{return JSON.parse(localStorage.getItem('skd_'+n)||'{}')}catch(e){return {}}},sv=(n,m)=>{try{localStorage.setItem('skd_'+n,JSON.stringify(m))}catch(e){}};
 const fire=n=>{const s={docs:Object.entries(ld(n)).map(([id,v])=>({id,data:()=>v}))};(subs[n]||[]).forEach(f=>f(s))};
 const localAdapter={collection:n=>({
  add:async d=>{const m=ld(n);m['l'+Date.now()+Math.random().toString(36).slice(2,6)]=d;sv(n,m);fire(n)},
- doc:id=>({update:async d=>{const m=ld(n);Object.assign(m[id]||(m[id]={}),d);sv(n,m);fire(n)}}),
+ doc:id=>({update:async d=>{const m=ld(n);Object.assign(m[id]||(m[id]={}),d);sv(n,m);fire(n)},delete:async()=>{const m=ld(n);delete m[id];sv(n,m);fire(n)}}),
  onSnapshot:f=>{(subs[n]=subs[n]||[]).push(f);fire(n)}})};
 const adapter=LOCAL?localAdapter:fbAdapter;
 const setAdm=async o=>{if(LOCAL)localStorage.setItem('skd_admin',JSON.stringify(o));else await setDoc(doc(fs,'settings','admin'),o)};
