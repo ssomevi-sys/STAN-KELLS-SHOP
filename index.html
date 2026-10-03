@@ -56,7 +56,7 @@ header h1{margin:0;font-size:clamp(1.05rem,4vw,1.5rem);letter-spacing:1.5px}head
 nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;gap:4px;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));background:var(--glass);backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%);border-top:1px solid var(--gbd);box-shadow:0 -6px 24px rgba(10,95,132,.15);overflow-x:auto}
 nav button{flex:1;min-width:58px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border:0;border-radius:14px;background:transparent;color:var(--mut);font-size:.66rem;font-weight:600;cursor:pointer;white-space:nowrap}
 nav button i{font-style:normal;font-size:1.3rem}
-nav button.on{background:linear-gradient(135deg,var(--pink),#f472b6);color:#fff;box-shadow:0 4px 14px rgba(236,72,153,.4)}
+nav button.on{background:linear-gradient(135deg,var(--pink),#e83dee);color:#fff;box-shadow:0 4px 14px rgba(236,72,153,.4)}
 main{max-width:1100px;margin:auto;padding:14px}
 .card{background:var(--glass);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);border:1px solid var(--gbd);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
 h2{margin:0 0 12px;color:var(--sea);font-size:1.1rem}
@@ -177,12 +177,12 @@ async function doRepay(cid){
 }
 function credits(){
  const rows=[...SA].sort((a,b)=>b.ts-a.ts).map(s=>{const b=bal(s),od=b>0&&s.due&&s.due<today(),c=cust(s.cid);
-  return `<tr><td>${s.date}</td><td>${esc(c.name)}<br><small>${esc(c.phone)}</small></td><td>${(s.items||[]).map(i=>esc(i.name)+' ×'+i.q).join('<br>')}</td><td>${M(s.total)}</td><td>${M(s.total-b)}<br><small>${(s.payments||[]).map(p=>p.date+': '+M(p.amt)).join('<br>')}</small></td><td><b>${M(b)}</b></td><td>${b>0?s.due:''}</td><td>${b<=0?'<span class="tag">Paid</span>':od?'<span class="tag r">Overdue</span>':'<span class="tag r" style="opacity:.7">Owing</span>'}</td></tr>`}).join('');
- return `<div class="card"><h2>Sales, Credits & Payment History</h2><div class="tw"><table><tr><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Paid</th><th>Balance</th><th>Est. pay date</th><th>Status</th></tr>${rows||'<tr><td colspan="8">No sales yet.</td></tr>'}</table></div></div>`;
+  return `<tr><td>${s.date}</td><td>${esc(c.name)}<br><small>${esc(c.phone)}</small></td><td>${(s.items||[]).map(i=>esc(i.name)+' ×'+i.q).join('<br>')}</td><td>${M(s.total)}</td><td>${M(s.total-b)}<br><small>${(s.payments||[]).map(p=>p.date+': '+M(p.amt)).join('<br>')}</small></td><td><b>${M(b)}</b></td><td>${b>0?s.due:''}</td><td>${b<=0?'<span class="tag">Paid</span>':od?'<span class="tag r">Overdue</span>':'<span class="tag r" style="opacity:.7">Owing</span>'}</td><td style="white-space:nowrap">${(s.payments||[]).length?`<button class="btn s" onclick="undoPay('${s.id}')">Undo last payment</button> `:''}<button class="btn s" style="background:#8a98a0" onclick="delS('${s.id}')">Delete</button></td></tr>`}).join('');
+ return `<div class="card"><h2>Sales, Credits & Payment History</h2><div class="tw"><table><tr><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Paid</th><th>Balance</th><th>Est. pay date</th><th>Status</th><th></th></tr>${rows||'<tr><td colspan="9">No sales yet.</td></tr>'}</table></div></div>`;
 }
 function custs(){
  return `<div class="card"><h2>Add Customer</h2><div class="row"><div><label>Name</label><input id="cn"></div><div><label>Phone number</label><input id="cp" type="tel"></div><div><label>Location</label><input id="cl"></div></div><button class="btn p" onclick="addC()">Save Customer</button></div>
- <div class="card"><h2>Customers</h2><div class="tw"><table><tr><th>Name</th><th>Phone</th><th>Location</th><th>Owes</th><th>Status</th></tr>${[...C].sort((a,b)=>owes(b.id)-owes(a.id)).map(c=>{const o=owes(c.id);return `<tr><td>${esc(c.name)}</td><td>${esc(c.phone)}</td><td>${esc(c.loc)}</td><td>${M(o)}</td><td>${o>0?'<span class="tag r">Owing</span>':'<span class="tag">Cleared</span>'}</td></tr>`}).join('')||'<tr><td colspan="5">No customers yet.</td></tr>'}</table></div></div>`;
+ <div class="card"><h2>Customers</h2><div class="tw"><table><tr><th>Name</th><th>Phone</th><th>Location</th><th>Owes</th><th>Status</th><th></th></tr>${[...C].sort((a,b)=>owes(b.id)-owes(a.id)).map(c=>{const o=owes(c.id);return `<tr><td>${esc(c.name)}</td><td>${esc(c.phone)}</td><td>${esc(c.loc)}</td><td>${M(o)}</td><td>${o>0?'<span class="tag r">Owing</span>':'<span class="tag">Cleared</span>'}</td><td><button class="btn s" style="background:#8a98a0" onclick="delC('${c.id}')">Delete</button></td></tr>`}).join('')||'<tr><td colspan="6">No customers yet.</td></tr>'}</table></div></div>`;
 }
 async function addC(){const n=$('#cn').value.trim(),p=$('#cp').value.trim(),l=$('#cl').value.trim();if(!n||!p)return alert('Name and phone are required.');
  try{await col('customers').add({name:n,phone:p,loc:l,ts:Date.now()});$('#cn').value=$('#cp').value=$('#cl').value=''}catch(e){alert('Could not save: '+(e.message||e.code))}}
@@ -297,6 +297,27 @@ async function saveE(id){const n=$('#en').value.trim(),p=+$('#ep').value,qq=+$('
  try{await col('stock').doc(id).update({name:n,cat:$('#ec').value,price:p,qty:Math.max(0,qq||0)});editId=null;render()}catch(e){alert('Could not save: '+(e.message||e.code))}}
 async function delE(id){if(!confirm('Delete this product? Past sales are not affected.'))return;try{await col('stock').doc(id).delete();editId=null;render()}catch(e){alert('Could not delete')}}
 async function restock(id){const qq=+prompt('Quantity to add:');if(qq>0){const it=S.find(i=>i.id==id);try{await col('stock').doc(id).update({qty:it.qty+qq})}catch(e){alert('Could not save')}}}
+async function delC(id){
+ const c=cust(id),sl=SA.filter(s=>s.cid==id),o=owes(id);
+ let m='Delete customer "'+c.name+'"?';
+ if(sl.length)m+='\n\nTheir '+sl.length+' sale record(s) will also be deleted.';
+ if(o>0)m+='\n\nWARNING: this customer still owes '+M(o)+'. That debt will be lost.';
+ if(!confirm(m))return;
+ try{for(const s of sl)await col('sales').doc(s.id).delete();await col('customers').doc(id).delete()}catch(e){alert('Could not delete: '+(e.message||e.code))}}
+async function delS(id){
+ const s=SA.find(x=>x.id==id);if(!s)return;
+ if(!confirm('Delete this sale for '+cust(s.cid).name+' ('+M(s.total)+')?'+(bal(s)>0?'\n\nWARNING: '+M(bal(s))+' is still owing and will be lost.':'')))return;
+ const back=confirm('Put the items back into stock?\n\nOK = Yes, return to stock\nCancel = No, just delete the record');
+ try{
+  if(back)for(const x of s.items||[]){const it=S.find(i=>i.id==x.id);if(it)await col('stock').doc(it.id).update({qty:it.qty+x.q})}
+  await col('sales').doc(id).delete();
+ }catch(e){alert('Could not delete: '+(e.message||e.code))}}
+async function undoPay(id){
+ const s=SA.find(x=>x.id==id),p=(s&&s.payments||[]).slice(-1)[0];if(!p)return;
+ if(!confirm('Undo the last payment of '+M(p.amt)+' made on '+p.date+'?'))return;
+ const payments=s.payments.slice(0,-1);let due=s.due;
+ if(!due){due=prompt('The balance is owing again. Enter the estimated payment date (YYYY-MM-DD):',today())||today()}
+ try{await col('sales').doc(id).update({payments,due})}catch(e){alert('Could not save: '+(e.message||e.code))}}
 const rows=snap=>snap.docs.map(d=>({id:d.id,...d.data()}));
 window.start=function(adapter){
  db=adapter;
