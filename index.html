@@ -253,7 +253,7 @@ function custs(){
 }
 async function addC(){const n=$('#cn').value.trim(),p=$('#cp').value.trim(),l=$('#cl').value.trim();if(!n||!p)return alert('Name and phone are required.');
  try{await col('customers').add({name:n,phone:p,loc:l,ts:Date.now()});$('#cn').value=$('#cp').value=$('#cl').value=''}catch(e){alert('Could not save: '+(e.message||e.code))}}
-const CATS=["CCTV & Security","CCTV Accessories","Electronics","Fans","Electrical Appliances","Wiring & Cables"];
+const CATS=["CCTV & Security","CCTV Accessories","Electronics","Computers & Accessories","Fans","Electrical Appliances","Wiring & Cables"];
 const CAT_TXT=`Hikvision 2MP Dome Camera|CCTV & Security|190
 Hikvision 5MP Bullet Camera|CCTV & Security|290
 Dahua 2MP Dome Camera|CCTV & Security|180
@@ -343,8 +343,95 @@ Distribution Board 8-Way|Wiring & Cables|260
 Conduit Pipe 20mm|Wiring & Cables|6
 PVC Trunking 50mm|Wiring & Cables|14
 Electrical Tape|Wiring & Cables|3
-13A Plug Top|Wiring & Cables|8`;
-const SEED=CAT_TXT.split('\n').map(l=>{const a=l.split('|');return [a[0],a[1],10,+a[2]]});
+13A Plug Top|Wiring & Cables|8
+HP 15 Laptop Core i3 4GB/256GB SSD|Computers & Accessories|3200|5
+HP 15 Laptop Core i5 8GB/512GB SSD|Computers & Accessories|4800|5
+HP ProBook 450 G9 Core i5 8GB/512GB|Computers & Accessories|5600|4
+HP EliteBook 840 G5 Core i5 (UK Used)|Computers & Accessories|3300|5
+HP Pavilion Gaming Laptop Ryzen 5|Computers & Accessories|6500|3
+Dell Inspiron 15 Core i3 4GB/256GB|Computers & Accessories|3300|5
+Dell Inspiron 15 Core i5 8GB/512GB|Computers & Accessories|4900|5
+Dell Latitude 5420 Core i5 (UK Used)|Computers & Accessories|3400|5
+Dell Vostro 3510 Core i5 8GB/512GB|Computers & Accessories|5000|4
+Lenovo IdeaPad 3 Core i3 4GB/256GB|Computers & Accessories|3100|5
+Lenovo IdeaPad 3 Core i5 8GB/512GB|Computers & Accessories|4700|5
+Lenovo ThinkPad T480 Core i5 (UK Used)|Computers & Accessories|3200|5
+Lenovo ThinkPad E14 Core i5 8GB/512GB|Computers & Accessories|5300|4
+Asus VivoBook 15 Core i3 4GB/256GB|Computers & Accessories|3200|5
+Asus VivoBook 15 Core i5 8GB/512GB|Computers & Accessories|4800|5
+Asus TUF Gaming Laptop RTX|Computers & Accessories|7800|2
+Acer Aspire 5 Core i3 4GB/256GB|Computers & Accessories|3100|5
+Acer Aspire 5 Core i5 8GB/512GB|Computers & Accessories|4600|5
+Acer Swift 3 Core i5 8GB/512GB|Computers & Accessories|5200|3
+Apple MacBook Air M1 13"|Computers & Accessories|9500|3
+Apple MacBook Pro M2 13"|Computers & Accessories|13500|2
+Chromebook 11" 4GB/32GB|Computers & Accessories|1800|5
+Microsoft Surface Laptop Go|Computers & Accessories|6800|2
+HP ProDesk Desktop Core i5 8GB/256GB|Computers & Accessories|3600|4
+Dell OptiPlex 3080 Core i5 (UK Used)|Computers & Accessories|2800|4
+Lenovo ThinkCentre Desktop Core i5|Computers & Accessories|3400|4
+HP All-in-One 24" Core i5|Computers & Accessories|5800|3
+Dell All-in-One 24" Core i5|Computers & Accessories|6000|3
+Apple iMac 24" M1|Computers & Accessories|12500|2
+HP 22" LED Monitor|Computers & Accessories|780|8
+Dell 24" LED Monitor|Computers & Accessories|1050|8
+LG 24" IPS Monitor|Computers & Accessories|1100|8
+Samsung 27" Curved Monitor|Computers & Accessories|1700|5
+Acer 24" Monitor 75Hz|Computers & Accessories|980|8
+HP Wired Keyboard|Computers & Accessories|75|20
+Logitech K120 Keyboard|Computers & Accessories|85|20
+Dell Wired Keyboard|Computers & Accessories|80|15
+Logitech MK270 Wireless Keyboard & Mouse|Computers & Accessories|220|15
+HP Wireless Keyboard & Mouse Combo|Computers & Accessories|200|12
+Logitech M185 Wireless Mouse|Computers & Accessories|75|25
+Logitech M330 Silent Mouse|Computers & Accessories|120|15
+HP Wired Mouse|Computers & Accessories|40|25
+Gaming Mouse RGB|Computers & Accessories|110|12
+Mouse Pad|Computers & Accessories|20|30
+Laptop Bag 15.6" Backpack|Computers & Accessories|150|15
+HP Laptop Charger 65W|Computers & Accessories|180|15
+Dell Laptop Charger 65W|Computers & Accessories|190|15
+Lenovo Laptop Charger 65W|Computers & Accessories|180|15
+Asus/Acer Laptop Charger 65W|Computers & Accessories|170|15
+Laptop Battery (replacement)|Computers & Accessories|320|8
+Laptop Cooling Pad|Computers & Accessories|130|10
+Laptop Stand (aluminium)|Computers & Accessories|120|10
+SanDisk Flash Drive 32GB|Computers & Accessories|45|30
+SanDisk Flash Drive 64GB|Computers & Accessories|70|30
+SanDisk Flash Drive 128GB|Computers & Accessories|110|20
+Kingston Flash Drive 64GB|Computers & Accessories|65|25
+WD External Hard Drive 1TB|Computers & Accessories|480|10
+WD External Hard Drive 2TB|Computers & Accessories|650|8
+Seagate External Hard Drive 1TB|Computers & Accessories|470|10
+Samsung SSD 500GB 2.5" SATA|Computers & Accessories|420|10
+Samsung SSD 1TB 2.5" SATA|Computers & Accessories|700|8
+NVMe SSD 512GB|Computers & Accessories|450|8
+Laptop RAM DDR4 8GB|Computers & Accessories|260|12
+Desktop RAM DDR4 8GB|Computers & Accessories|250|12
+Laptop RAM DDR3 4GB|Computers & Accessories|110|12
+USB Hub 4-Port|Computers & Accessories|45|20
+USB-C Hub 7-in-1|Computers & Accessories|230|10
+Card Reader USB|Computers & Accessories|30|20
+HDMI Cable 1.5m|Computers & Accessories|25|30
+VGA Cable 1.5m|Computers & Accessories|20|25
+DisplayPort Cable|Computers & Accessories|45|15
+LAN Patch Cord CAT6 3m|Computers & Accessories|15|40
+Logitech C270 Webcam|Computers & Accessories|260|10
+HP Headset with Mic|Computers & Accessories|120|12
+Logitech Headset H111|Computers & Accessories|140|12
+HP LaserJet Pro M15w Printer|Computers & Accessories|1500|4
+Canon PIXMA G2410 Ink Tank Printer|Computers & Accessories|1700|4
+Epson L3250 Ink Tank Printer|Computers & Accessories|1900|4
+Brother HL-L2350DW Laser Printer|Computers & Accessories|1600|3
+Epson Ink Bottle (each)|Computers & Accessories|55|30
+HP 17A Toner Cartridge|Computers & Accessories|420|8
+TP-Link Archer C6 WiFi Router|Computers & Accessories|320|10
+TP-Link 8-Port Switch|Computers & Accessories|150|10
+APC 650VA UPS|Computers & Accessories|650|8
+Surge Protector 4-Way|Computers & Accessories|90|20
+Microsoft Office License|Computers & Accessories|450|10
+ESET Internet Security 1-Year|Computers & Accessories|180|15`;
+const SEED=CAT_TXT.split('\n').map(l=>{const a=l.split('|');return [a[0],a[1],a[3]?+a[3]:10,+a[2]]});
 async function seed(){
  const have=new Set(S.map(i=>i.name.toLowerCase())),add=SEED.filter(a=>!have.has(a[0].toLowerCase()));
  if(!add.length)return alert('All catalogue products are already in your stock.');
@@ -385,12 +472,20 @@ async function undoPay(id){
  const payments=s.payments.slice(0,-1);let due=s.due;
  if(!due){due=prompt('The balance is owing again. Enter the estimated payment date (YYYY-MM-DD):',today())||today()}
  try{await col('sales').doc(id).update({payments,due})}catch(e){alert('Could not save: '+(e.message||e.code))}}
+let stockLoaded=false,setLoaded=false,FL=new Set(),seeding=false;
+async function autoSeed(){ // adds the Computers & Accessories range once, automatically
+ if(!stockLoaded||!setLoaded||seeding||FL.has('seed_computers'))return;seeding=true;
+ try{await col('settings').doc('seed_computers').set({at:Date.now()});FL.add('seed_computers');
+  const have=new Set(S.map(i=>i.name.toLowerCase())),add=SEED.filter(a=>a[1]==='Computers & Accessories'&&!have.has(a[0].toLowerCase()));
+  await Promise.all(add.map(a=>col('stock').add({name:a[0],cat:a[1],qty:a[2],price:a[3]})));
+ }catch(e){seeding=false}}
 const rows=snap=>snap.docs.map(d=>({id:d.id,...d.data()}));
 window.start=function(adapter){
  db=adapter;
  $('#st').innerHTML='● Live: shared across all devices &nbsp; <a href="#" onclick="window.changePw(false);return false">Change password</a> &nbsp;|&nbsp; <a href="#" onclick="window.logout();return false">Log out</a>';
  const err=e=>{$('#st').textContent='Sync problem: '+(e&&e.message||'')};
- col('stock').onSnapshot(s=>{S=rows(s);soft()},err);
+ col('stock').onSnapshot(s=>{S=rows(s);stockLoaded=true;soft();autoSeed()},err);
+ col('settings').onSnapshot(s=>{FL=new Set(s.docs.map(d=>d.id));setLoaded=true;autoSeed()},err);
  col('customers').onSnapshot(s=>{C=rows(s);soft()},err);
  col('sales').onSnapshot(s=>{SA=rows(s);soft()},err);
  render();
@@ -421,13 +516,13 @@ if(!LOCAL)try{signInAnonymously(getAuth(app)).catch(()=>{})}catch(e){} // silent
 const fs=LOCAL?null:initializeFirestore(app,{localCache:persistentLocalCache()});
 const fbAdapter={collection:n=>({
  add:d=>addDoc(collection(fs,n),d),
- doc:id=>({update:d=>updateDoc(doc(fs,n,id),d),delete:()=>deleteDoc(doc(fs,n,id))}),
+ doc:id=>({update:d=>updateDoc(doc(fs,n,id),d),delete:()=>deleteDoc(doc(fs,n,id)),set:d=>setDoc(doc(fs,n,id),d)}),
  onSnapshot:(f,e)=>onSnapshot(collection(fs,n),s=>f({docs:s.docs}),e)})};
 const subs={},ld=n=>{try{return JSON.parse(localStorage.getItem('skd_'+n)||'{}')}catch(e){return {}}},sv=(n,m)=>{try{localStorage.setItem('skd_'+n,JSON.stringify(m))}catch(e){}};
 const fire=n=>{const s={docs:Object.entries(ld(n)).map(([id,v])=>({id,data:()=>v}))};(subs[n]||[]).forEach(f=>f(s))};
 const localAdapter={collection:n=>({
  add:async d=>{const m=ld(n);m['l'+Date.now()+Math.random().toString(36).slice(2,6)]=d;sv(n,m);fire(n)},
- doc:id=>({update:async d=>{const m=ld(n);Object.assign(m[id]||(m[id]={}),d);sv(n,m);fire(n)},delete:async()=>{const m=ld(n);delete m[id];sv(n,m);fire(n)}}),
+ doc:id=>({update:async d=>{const m=ld(n);Object.assign(m[id]||(m[id]={}),d);sv(n,m);fire(n)},delete:async()=>{const m=ld(n);delete m[id];sv(n,m);fire(n)},set:async d=>{const m=ld(n);m[id]=d;sv(n,m);fire(n)}}),
  onSnapshot:f=>{(subs[n]=subs[n]||[]).push(f);fire(n)}})};
 const adapter=LOCAL?localAdapter:fbAdapter;
 const setAdm=async o=>{if(LOCAL)localStorage.setItem('skd_admin',JSON.stringify(o));else await setDoc(doc(fs,'settings','admin'),o)};
