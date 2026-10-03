@@ -36,6 +36,7 @@
 -->
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a7ea8"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Stan Kells"><link rel="apple-touch-icon" id="ati" href="">
 <title>STAN KELLS DIGITALS</title>
 <style>
 :root{--sea:#0a7ea8;--sea2:#0a5f84;--pink:#ec4899;--tx:#10303c;--mut:#4a6b78;--glass:rgba(255,255,255,.58);--glass2:rgba(255,255,255,.4);--gbd:rgba(255,255,255,.75);--inp:rgba(255,255,255,.7);--bd:rgba(10,126,168,.18);--sh:0 8px 32px rgba(10,95,132,.15);--bg:#fff;--soft:rgba(10,126,168,.08);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
@@ -115,10 +116,50 @@ footer{text-align:center;padding:16px 16px 8px;font-size:.82rem;color:var(--sea)
  nav button{font-size:.78rem;min-width:64px}nav button i{font-size:1.5rem}
 }
 @media(min-width:760px) and (max-width:1024px){nav button{font-size:1rem}nav button i{font-size:1.2rem}}
+
+/* ===== App-like experience ===== */
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+main>*{animation:up .45s cubic-bezier(.2,.8,.2,1) both}
+main>*:nth-child(2){animation-delay:.06s}main>*:nth-child(3){animation-delay:.12s}main>*:nth-child(4){animation-delay:.18s}main>*:nth-child(5){animation-delay:.24s}
+.call{margin-left:auto;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;text-decoration:none;padding:8px 12px;border-radius:14px;font-weight:700;font-size:.85rem;white-space:nowrap}
+.hero{background:linear-gradient(135deg,rgba(10,126,168,.95),rgba(236,72,153,.88));color:#fff;border-radius:26px;padding:22px 20px;margin-bottom:14px;box-shadow:0 14px 34px rgba(10,95,132,.35);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.16);right:-50px;top:-60px}
+.hero small{opacity:.9;font-size:.9rem;display:block}.hero .big{font-size:clamp(1.9rem,9vw,2.6rem);font-weight:800;margin:4px 0 10px;letter-spacing:.5px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chips span{background:rgba(255,255,255,.22);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:20px;padding:5px 12px;font-size:.85rem;font-weight:600}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.quick button{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--gbd);border-radius:20px;padding:12px 4px;color:var(--tx);font-weight:700;font-size:.8rem;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;box-shadow:var(--sh);animation:pop .4s both}
+.quick button i{font-style:normal;font-size:1.5rem;width:50px;height:50px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,var(--sea),#2aa6cf);box-shadow:0 4px 12px rgba(10,126,168,.35)}
+.quick button:nth-child(odd) i{background:linear-gradient(135deg,var(--pink),#f472b6);box-shadow:0 4px 12px rgba(236,72,153,.35)}
+.quick button:active{transform:scale(.94)}
+#fab{display:none}
+@media(max-width:759px){
+ :root{padding-top:0}
+ body{min-height:100dvh;padding-bottom:calc(92px + env(safe-area-inset-bottom,0px));overscroll-behavior-y:none}
+ header{position:sticky;top:0;z-index:30;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;border-radius:0 0 22px 22px;border-bottom:0}
+ .brand{gap:10px}.logo{width:40px;height:40px;border-radius:13px;font-size:.95rem}
+ header h1{font-size:1.1rem}header small{display:none}
+ #st{margin:8px 12px 0;border-radius:14px;border:1px solid var(--gbd);padding:6px 10px;font-size:.82rem}
+ main{padding:12px 12px 8px}
+ .card{border-radius:24px;padding:18px 16px}
+ .grid{grid-template-columns:repeat(2,1fr)}
+ nav{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin:0 10px calc(10px + env(safe-area-inset-bottom,0px));padding:8px 6px;left:0;right:0;border-radius:26px;border:1px solid var(--gbd);overflow:hidden;box-shadow:0 10px 34px rgba(10,95,132,.28)}
+ nav button{min-width:0;padding:7px 0;font-size:.62rem;border-radius:18px}
+ nav button i{font-size:1.45rem}
+ nav button.on span{font-weight:800}
+ #fab{display:flex;position:fixed;right:16px;bottom:calc(98px + env(safe-area-inset-bottom,0px));z-index:25;align-items:center;gap:6px;border:0;border-radius:30px;padding:14px 20px;background:linear-gradient(135deg,var(--pink),#f472b6);color:#fff;font-weight:800;font-size:1rem;box-shadow:0 10px 26px rgba(236,72,153,.5);animation:pop .4s both}
+ #fab.off{display:none}
+ .sticky-act{position:sticky;bottom:calc(100px + env(safe-area-inset-bottom,0px));width:100%;z-index:10;font-size:1.1rem;box-shadow:0 8px 24px rgba(236,72,153,.45)}
+ footer{padding:10px 16px 0;font-size:.8rem;opacity:.85}
+ #login .card{max-width:none!important;border-radius:28px}
+}
+@media(max-width:380px){nav button{font-size:.56rem}.quick button{font-size:.72rem}}
+.lgo{width:72px;height:72px;margin:0 auto 10px;border-radius:24px;background:linear-gradient(135deg,var(--pink),#ff8cc6);display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.5rem;box-shadow:0 8px 22px rgba(236,72,153,.5)}
 </style></head><body>
 <div class="blobs"></div>
-<header><div class="brand"><div class="logo">SK</div><div><h1>STAN KELLS DIGITALS</h1><small>Electronics • CCTV & Security • Appliances • Cables &nbsp;|&nbsp; Tel: 0548492347</small></div></div></header>
+<header><div class="brand"><div class="logo">SK</div><div><h1>STAN KELLS DIGITALS</h1><small>Electronics • CCTV & Security • Appliances • Cables &nbsp;|&nbsp; Tel: 0548492347</small></div><a class="call" href="tel:0548492347">📞 Call</a></div></header>
 <div id="st" class="ok">Connecting…</div>
+<button id="fab" class="off" onclick="go('New Sale')">＋ New Sale</button>
 <nav id="nav"></nav><main id="app"></main>
 <footer>© STAN KELLS DIGITALS • 0548492347<br>Developed by <b>SOMEFOST SOLUTIONS</b></footer>
 <script>
@@ -129,8 +170,11 @@ let db=null,S=[],C=[],SA=[],tab='Dashboard',lines=[{}],F={cid:'',paid:0,due:'',p
 const tabs=['Dashboard','New Sale','Repay Debt','Credits','Customers','Stock'];
 const ICON={Dashboard:'📊','New Sale':'🛒','Repay Debt':'💳',Credits:'📒',Customers:'👥',Stock:'📦'};
 $('#nav').innerHTML=tabs.map(t=>`<button data-t="${t}"><i>${ICON[t]}</i><span>${t}</span></button>`).join('');
+function go(t){try{navigator.vibrate&&navigator.vibrate(12)}catch(x){}tab=t;render();window.scrollTo({top:0,behavior:'smooth'})}
+function fabUpd(){$('#fab').classList.toggle('off',!['Dashboard','Credits','Customers'].includes(tab)||!db)}
+(function(){try{const c=document.createElement('canvas');c.width=c.height=180;const g=c.getContext('2d'),gr=g.createLinearGradient(0,0,180,180);gr.addColorStop(0,'#0a7ea8');gr.addColorStop(1,'#ec4899');g.fillStyle=gr;g.fillRect(0,0,180,180);g.fillStyle='#fff';g.font='bold 78px system-ui,Arial';g.textAlign='center';g.textBaseline='middle';g.fillText('SK',90,96);document.getElementById('ati').href=c.toDataURL('image/png')}catch(e){}})();
 function lab(){document.querySelectorAll('table').forEach(t=>{const hs=[...t.rows[0].cells].map(c=>c.textContent);[...t.rows].slice(1).forEach(r=>[...r.cells].forEach((c,i)=>c.dataset.l=hs[i]||''))})}
-$('#nav').onclick=e=>{const b=e.target.closest('button');if(b){tab=b.dataset.t;render();window.scrollTo({top:0,behavior:'smooth'})}};
+$('#nav').onclick=e=>{const b=e.target.closest('button');if(b){try{navigator.vibrate&&navigator.vibrate(12)}catch(x){}tab=b.dataset.t;render();window.scrollTo({top:0,behavior:'smooth'})}};
 const bal=s=>s.total-(s.payments||[]).reduce((a,p)=>a+p.amt,0);
 const cust=id=>C.find(c=>c.id==id)||{name:'(deleted)',phone:''};
 const owes=id=>SA.filter(s=>s.cid==id).reduce((a,s)=>a+Math.max(0,bal(s)),0);
@@ -139,7 +183,7 @@ function render(){
  dirty=false;
  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==tab));
  if(!db){$('#app').innerHTML='<div class="warn">Please log in to continue.</div>';return}
- $('#app').innerHTML=({Dashboard:dash,'New Sale':sale,'Repay Debt':repay,Credits:credits,Customers:custs,Stock:stockV})[tab]();lab();
+ $('#app').innerHTML=({Dashboard:dash,'New Sale':sale,'Repay Debt':repay,Credits:credits,Customers:custs,Stock:stockV})[tab]();lab();fabUpd();
 }
 function soft(){ // re-render without wiping what someone is typing
  const a=document.activeElement;if(a&&/INPUT|SELECT/.test(a.tagName)){dirty=true}else render()}
@@ -147,7 +191,10 @@ document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.active
 function dash(){
  const out=SA.reduce((a,s)=>a+Math.max(0,bal(s)),0),tot=SA.reduce((a,s)=>a+s.total,0),low=S.filter(i=>i.qty<=5);
  const od=SA.filter(s=>bal(s)>0&&s.due&&s.due<today()),owing=C.filter(c=>owes(c.id)>0);
- return `<div class="grid"><div class="stat">Customers<b>${C.length}</b></div><div class="stat">Total Sales<b>${M(tot)}</b></div><div class="stat">Customers Owing<b>${owing.length}</b></div><div class="stat">Outstanding Credit<b>${M(out)}</b></div><div class="stat">Overdue<b>${od.length}</b></div><div class="stat">Low Stock<b>${low.length}</b></div></div>
+ const hr=new Date().getHours(),greet=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+ return `<div class="hero"><small>${greet} 👋 &nbsp;•&nbsp; ${new Date().toDateString()}</small><small style="margin-top:10px">Outstanding credit</small><div class="big">${M(out)}</div><div class="chips"><span>👥 ${owing.length} owing</span><span>⏰ ${od.length} overdue</span><span>📦 ${low.length} low stock</span></div></div>
+ <div class="quick"><button onclick="go('New Sale')"><i>🛒</i>New Sale</button><button onclick="go('Repay Debt')"><i>💳</i>Repay</button><button onclick="go('Customers')"><i>👥</i>Customers</button><button onclick="go('Stock')"><i>📦</i>Stock</button></div>
+ <div class="grid"><div class="stat">Customers<b>${C.length}</b></div><div class="stat">Total Sales<b>${M(tot)}</b></div><div class="stat">Customers Owing<b>${owing.length}</b></div><div class="stat">Outstanding Credit<b>${M(out)}</b></div><div class="stat">Overdue<b>${od.length}</b></div><div class="stat">Low Stock<b>${low.length}</b></div></div>
  <div class="card" style="margin-top:14px"><h2>Low stock (5 or fewer)</h2>${low.length?low.map(i=>`<span class="tag r">${esc(i.name)}: ${i.qty}</span> `).join(''):'All items well stocked.'}</div>
  <div class="card"><h2>Overdue payments</h2>${od.length?od.map(s=>`${esc(cust(s.cid).name)} (${esc(cust(s.cid).phone)}) owes <b>${M(bal(s))}</b>, was due ${s.due}<br>`).join(''):'None.'}</div>`;
 }
@@ -158,7 +205,7 @@ function sale(){
  <label>Items bought</label>${lines.map((l,i)=>`<div class="line"><select onchange="lines[${i}].id=this.value"><option value="">-- item --</option>${opts.replace(`value="${l.id}"`,`value="${l.id}" selected`)}</select><input type="number" min="1" value="${l.q||1}" onchange="lines[${i}].q=+this.value"><button class="btn s p" onclick="lines.splice(${i},1);if(!lines.length)lines=[{}];render()">✕</button></div>`).join('')}
  <button class="btn s" onclick="lines.push({});render()">+ Add item</button>
  <div class="row"><div><label>Amount paid now (GH₵)</label><input type="number" min="0" value="${F.paid}" onchange="F.paid=+this.value"></div><div><label>Estimated payment date (for balance)</label><input type="date" value="${F.due}" onchange="F.due=this.value"></div></div>
- <button class="btn p" onclick="doSale()">Complete Sale</button></div>`;
+ <button class="btn p sticky-act" onclick="doSale()">Complete Sale</button></div>`;
 }
 async function doSale(){
  if(!F.cid)return alert('Select a customer (add one in Customers tab).');
@@ -351,7 +398,7 @@ window.start=function(adapter){
 render();
 </script>
 <div id="login" style="position:fixed;inset:0;background:var(--bg);z-index:99;display:flex;align-items:center;justify-content:center;padding:20px">
- <div class="card" style="max-width:360px;width:100%;text-align:center"><h2>STAN KELLS DIGITALS</h2><p>Staff login</p>
+ <div class="card" style="max-width:360px;width:100%;text-align:center"><div class="lgo">SK</div><h2>STAN KELLS DIGITALS</h2><p>Staff login</p>
  <input id="em" type="text" placeholder="Username" autocapitalize="none" autocomplete="username"><br><br><input id="pw" type="password" placeholder="Password" autocomplete="current-password">
  <button class="btn p" id="lg" style="width:100%">Log in</button><p id="le" style="color:var(--pink)"></p><small>Developed by SOMEFOST SOLUTIONS</small></div></div>
 <script type="module">
