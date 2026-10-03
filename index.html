@@ -38,31 +38,66 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>STAN KELLS DIGITALS</title>
 <style>
-:root{--sea:#0b7ea6;--sea2:#095f7d;--pink:#ec4899;--bg:#fff;--soft:#eef8fc;--tx:#12303b;--bd:#cfe6ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1f26;--soft:#13303b;--tx:#e8f6fb;--bd:#24505f}}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--tx)}
-header{background:linear-gradient(90deg,var(--sea),var(--sea2));color:#fff;padding:14px 16px;border-bottom:4px solid var(--pink)}
-header h1{margin:0;font-size:1.3rem;letter-spacing:1px}header small{opacity:.9}
-nav{display:flex;gap:6px;padding:10px;overflow-x:auto;background:var(--soft);position:sticky;top:0;z-index:5}
-nav button{padding:9px 14px;border-radius:20px;background:var(--bg);color:var(--sea);font-weight:600;cursor:pointer;border:1px solid var(--bd);white-space:nowrap}
-nav button.on{background:var(--pink);color:#fff;border-color:var(--pink)}
-main{max-width:980px;margin:auto;padding:14px}
-.card{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px}
-h2{margin:0 0 10px;color:var(--sea);font-size:1.1rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.stat{background:var(--soft);border-left:5px solid var(--pink);padding:12px;border-radius:8px}.stat b{display:block;font-size:1.3rem;color:var(--sea)}
-input,select{width:100%;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font-size:1rem}
-label{font-size:.8rem;font-weight:600;color:var(--sea);display:block;margin:6px 0 2px}
+:root{--sea:#0a7ea8;--sea2:#0a5f84;--pink:#ec4899;--tx:#10303c;--mut:#4a6b78;--glass:rgba(255,255,255,.58);--glass2:rgba(255,255,255,.4);--gbd:rgba(255,255,255,.75);--inp:rgba(255,255,255,.7);--bd:rgba(10,126,168,.18);--sh:0 8px 32px rgba(10,95,132,.15);--bg:#fff;--soft:rgba(10,126,168,.08);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--tx:#e8f6fb;--mut:#9cc3d1;--glass:rgba(16,48,62,.55);--glass2:rgba(16,48,62,.4);--gbd:rgba(255,255,255,.12);--inp:rgba(8,28,38,.6);--bd:rgba(120,200,230,.2);--sh:0 8px 32px rgba(0,0,0,.4);--bg:#0a1a22;--soft:rgba(10,126,168,.18)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--tx);min-height:100vh;background:linear-gradient(135deg,#c4ecf9 0%,#ffffff 45%,#ffd3e8 100%) fixed;padding-bottom:84px}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) body{background:linear-gradient(135deg,#06303f 0%,#0a1a22 50%,#3a0f2a 100%) fixed}}
+.blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blobs:before,.blobs:after{content:"";position:absolute;border-radius:50%;filter:blur(70px);opacity:.55}
+.blobs:before{width:420px;height:420px;background:#2bb7e0;top:-120px;left:-100px}
+.blobs:after{width:380px;height:380px;background:#ff7ab8;bottom:-120px;right:-80px}
+header{background:linear-gradient(120deg,rgba(10,126,168,.88),rgba(9,95,125,.88));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#fff;padding:12px 16px;border-bottom:3px solid var(--pink);box-shadow:var(--sh)}
+.brand{display:flex;align-items:center;gap:12px;max-width:1100px;margin:auto}
+.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--pink),#ff8cc6);display:grid;place-items:center;font-weight:800;letter-spacing:1px;box-shadow:0 4px 14px rgba(236,72,153,.5);flex:none}
+header h1{margin:0;font-size:clamp(1.05rem,4vw,1.5rem);letter-spacing:1.5px}header small{opacity:.92;font-size:clamp(.7rem,2.6vw,.85rem);display:block}
+#st{background:var(--glass2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--sea);padding:5px 10px;text-align:center;font-size:.78rem;border-bottom:1px solid var(--gbd)}
+#st a{color:var(--pink);font-weight:700}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;gap:4px;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));background:var(--glass);backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%);border-top:1px solid var(--gbd);box-shadow:0 -6px 24px rgba(10,95,132,.15);overflow-x:auto}
+nav button{flex:1;min-width:58px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border:0;border-radius:14px;background:transparent;color:var(--mut);font-size:.66rem;font-weight:600;cursor:pointer;white-space:nowrap}
+nav button i{font-style:normal;font-size:1.3rem}
+nav button.on{background:linear-gradient(135deg,var(--pink),#f472b6);color:#fff;box-shadow:0 4px 14px rgba(236,72,153,.4)}
+main{max-width:1100px;margin:auto;padding:14px}
+.card{background:var(--glass);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);border:1px solid var(--gbd);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
+h2{margin:0 0 12px;color:var(--sea);font-size:1.1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.stat{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--gbd);border-left:5px solid var(--pink);padding:14px;border-radius:16px;box-shadow:var(--sh);color:var(--mut);font-size:.82rem}
+.stat b{display:block;font-size:clamp(1.1rem,4vw,1.5rem);color:var(--sea);margin-top:2px}
+input,select{width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--bd);border-radius:12px;background:var(--inp);color:var(--tx);font-size:16px;outline:0;transition:.15s}
+input:focus,select:focus{border-color:var(--sea);box-shadow:0 0 0 3px rgba(10,126,168,.2)}
+label{font-size:.78rem;font-weight:700;color:var(--sea);display:block;margin:8px 0 3px}
 .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
-.btn{background:var(--sea);color:#fff;border:0;padding:10px 16px;border-radius:8px;font-weight:600;cursor:pointer;margin-top:10px}.btn.p{background:var(--pink)}.btn.s{padding:5px 10px;margin:0;font-size:.8rem}
-.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.9rem}th{background:var(--sea);color:#fff;text-align:left;padding:8px}td{padding:8px;border-bottom:1px solid var(--bd)}
-.tag{padding:2px 8px;border-radius:10px;font-size:.75rem;font-weight:700;color:#fff;background:var(--sea)}.tag.r{background:var(--pink)}
-footer{text-align:center;padding:16px;font-size:.85rem;color:var(--sea);border-top:4px solid var(--pink)}
-.line{display:grid;grid-template-columns:3fr 1fr auto;gap:6px;margin-bottom:6px}
-.warn{background:var(--pink);color:#fff;padding:10px 14px;text-align:center}.ok{background:var(--soft);color:var(--sea);padding:4px;text-align:center;font-size:.8rem}
-.debt{border:1px solid var(--pink);border-radius:10px;padding:12px;margin-bottom:10px}
+.btn{background:linear-gradient(135deg,var(--sea),#2aa6cf);color:#fff;border:0;min-height:44px;padding:10px 18px;border-radius:12px;font-weight:700;font-size:.95rem;cursor:pointer;margin-top:10px;box-shadow:0 4px 14px rgba(10,126,168,.3);transition:.15s}
+.btn:active{transform:scale(.97)}.btn.p{background:linear-gradient(135deg,var(--pink),#f472b6);box-shadow:0 4px 14px rgba(236,72,153,.35)}
+.btn.s{min-height:34px;padding:5px 12px;margin:0;font-size:.8rem;border-radius:10px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:separate;border-spacing:0;font-size:.9rem}
+th{background:linear-gradient(120deg,var(--sea),var(--sea2));color:#fff;text-align:left;padding:10px}th:first-child{border-radius:12px 0 0 12px}th:last-child{border-radius:0 12px 12px 0}
+td{padding:10px;border-bottom:1px solid var(--bd)}tr:hover td{background:var(--soft)}
+.tag{padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--sea),#2aa6cf);display:inline-block}.tag.r{background:linear-gradient(135deg,var(--pink),#f472b6)}
+footer{text-align:center;padding:16px 16px 8px;font-size:.82rem;color:var(--sea)}
+.line{display:grid;grid-template-columns:3fr 1fr auto;gap:8px;margin-bottom:8px}
+.warn{background:var(--pink);color:#fff;padding:12px;border-radius:14px;text-align:center}
+.debt{background:var(--glass2);border:1px solid var(--pink);border-radius:16px;padding:14px;margin-bottom:12px}
+#login{background:linear-gradient(135deg,#c4ecf9,#fff 50%,#ffd3e8)!important}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) #login{background:linear-gradient(135deg,#06303f,#0a1a22 50%,#3a0f2a)!important}}
+@media(min-width:760px){
+ body{padding-bottom:0}
+ nav{position:sticky;top:0;bottom:auto;justify-content:center;border-top:0;border-bottom:1px solid var(--gbd);box-shadow:var(--sh);padding:8px;flex-direction:row;overflow:visible}
+ nav button{flex:none;flex-direction:row;gap:7px;padding:10px 16px;font-size:.88rem;border-radius:22px}nav button i{font-size:1.05rem}
+ main{padding:20px}.card{padding:20px}
+}
+@media(max-width:700px){
+ table,tbody{display:block}tr:first-child{display:none}
+ tr{display:block;margin-bottom:12px;background:var(--glass2);border:1px solid var(--gbd);border-radius:16px;padding:6px 12px}
+ td{display:flex;justify-content:space-between;align-items:center;gap:14px;border:0;padding:7px 0;text-align:right}
+ td::before{content:attr(data-l);font-weight:700;color:var(--sea);text-align:left;font-size:.8rem;flex:none}
+ td[data-l=""]::before{display:none}td[data-l=""]{justify-content:flex-end}
+ td input,td select{width:62%}tr:hover td{background:transparent}
+ .line{grid-template-columns:1fr 70px auto}
+}
 </style></head><body>
-<header><h1>STAN KELLS DIGITALS</h1><small>Electronics • CCTV & Security • Appliances • Cables &nbsp;|&nbsp; Tel: 0548492347</small></header>
+<div class="blobs"></div>
+<header><div class="brand"><div class="logo">SK</div><div><h1>STAN KELLS DIGITALS</h1><small>Electronics • CCTV & Security • Appliances • Cables &nbsp;|&nbsp; Tel: 0548492347</small></div></div></header>
 <div id="st" class="ok">Connecting…</div>
 <nav id="nav"></nav><main id="app"></main>
 <footer>© STAN KELLS DIGITALS • 0548492347<br>Developed by <b>SOMEFOST SOLUTIONS</b></footer>
@@ -72,8 +107,10 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const M=n=>'GH₵ '+(+n).toFixed(2), today=()=>new Date().toISOString().slice(0,10);
 let db=null,S=[],C=[],SA=[],tab='Dashboard',lines=[{}],F={cid:'',paid:0,due:'',pick:''},dirty=false;
 const tabs=['Dashboard','New Sale','Repay Debt','Credits','Customers','Stock'];
-$('#nav').innerHTML=tabs.map(t=>`<button data-t="${t}">${t}</button>`).join('');
-$('#nav').onclick=e=>{if(e.target.dataset.t){tab=e.target.dataset.t;render()}};
+const ICON={Dashboard:'📊','New Sale':'🛒','Repay Debt':'💳',Credits:'📒',Customers:'👥',Stock:'📦'};
+$('#nav').innerHTML=tabs.map(t=>`<button data-t="${t}"><i>${ICON[t]}</i><span>${t}</span></button>`).join('');
+function lab(){document.querySelectorAll('table').forEach(t=>{const hs=[...t.rows[0].cells].map(c=>c.textContent);[...t.rows].slice(1).forEach(r=>[...r.cells].forEach((c,i)=>c.dataset.l=hs[i]||''))})}
+$('#nav').onclick=e=>{const b=e.target.closest('button');if(b){tab=b.dataset.t;render();window.scrollTo({top:0,behavior:'smooth'})}};
 const bal=s=>s.total-(s.payments||[]).reduce((a,p)=>a+p.amt,0);
 const cust=id=>C.find(c=>c.id==id)||{name:'(deleted)',phone:''};
 const owes=id=>SA.filter(s=>s.cid==id).reduce((a,s)=>a+Math.max(0,bal(s)),0);
@@ -82,7 +119,7 @@ function render(){
  dirty=false;
  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==tab));
  if(!db){$('#app').innerHTML='<div class="warn">Please log in to continue.</div>';return}
- $('#app').innerHTML=({Dashboard:dash,'New Sale':sale,'Repay Debt':repay,Credits:credits,Customers:custs,Stock:stockV})[tab]();
+ $('#app').innerHTML=({Dashboard:dash,'New Sale':sale,'Repay Debt':repay,Credits:credits,Customers:custs,Stock:stockV})[tab]();lab();
 }
 function soft(){ // re-render without wiping what someone is typing
  const a=document.activeElement;if(a&&/INPUT|SELECT/.test(a.tagName)){dirty=true}else render()}
@@ -252,7 +289,7 @@ const stRow=i=>i.id===editId?`<tr style="background:var(--soft)"><td><input id="
 const stRows=()=>`<table><tr><th>Item</th><th>Category</th><th>Price</th><th>Qty</th><th></th></tr>${[...S].filter(i=>(i.name+' '+i.cat).toLowerCase().includes(q.toLowerCase())).sort((a,b)=>a.cat.localeCompare(b.cat)||a.name.localeCompare(b.name)).map(stRow).join('')||'<tr><td colspan="5">No products found.</td></tr>'}</table>`;
 function stockV(){
  return `<div class="card"><h2>Add Stock Item</h2><div class="row"><div><label>Item name</label><input id="in"></div><div><label>Category</label><select id="ic">${CATS.map(c=>`<option>${c}</option>`).join('')}</select></div><div><label>Quantity</label><input id="iq" type="number" min="0"></div><div><label>Unit price (GH₵)</label><input id="ip" type="number" min="0"></div></div><button class="btn p" onclick="addI()">Add to Stock</button> <button class="btn" onclick="seed()">Add extended catalogue (fans, CCTV, appliances, cables…)</button></div>
- <div class="card"><h2>Stock — tap Edit to change a name, price or quantity</h2><input placeholder="Search products or category…" value="${esc(q)}" oninput="q=this.value;document.getElementById('stl').innerHTML=stRows()"><div class="tw" id="stl" style="margin-top:8px">${stRows()}</div></div>`;
+ <div class="card"><h2>Stock — tap Edit to change a name, price or quantity</h2><input placeholder="Search products or category…" value="${esc(q)}" oninput="q=this.value;document.getElementById('stl').innerHTML=stRows();lab()"><div class="tw" id="stl" style="margin-top:8px">${stRows()}</div></div>`;
 }
 async function addI(){const n=$('#in').value.trim(),qq=+$('#iq').value,p=+$('#ip').value;if(!n||!p)return alert('Name and price required.');
  try{await col('stock').add({name:n,cat:$('#ic').value,qty:qq||0,price:p})}catch(e){alert('Could not save: '+(e.message||e.code))}}
