@@ -155,6 +155,14 @@ main>*:nth-child(2){animation-delay:.06s}main>*:nth-child(3){animation-delay:.12
 }
 @media(max-width:380px){nav button{font-size:.56rem}.quick button{font-size:.72rem}}
 .lgo{width:72px;height:72px;margin:0 auto 10px;border-radius:24px;background:linear-gradient(135deg,var(--pink),#ff8cc6);display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.5rem;box-shadow:0 8px 22px rgba(236,72,153,.5)}
+
+.lowrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.lowrow:last-child{border-bottom:0}
+details.more{margin-top:8px}
+details.more summary{cursor:pointer;list-style:none;text-align:center;font-weight:700;color:var(--sea);padding:12px;border-radius:14px;background:var(--soft);border:1px solid var(--bd)}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary:after{content:" ▾"}details.more[open] summary:after{content:" ▴"}
+details.more[open] summary{margin-bottom:6px}
 </style></head><body>
 <div class="blobs"></div>
 <header><div class="brand"><div class="logo">SK</div><div><h1>STAN KELLS DIGITALS</h1><small>Electronics • CCTV & Security • Appliances • Cables &nbsp;|&nbsp; Tel: 0548492347</small></div><a class="call" href="tel:0548492347">📞 Call</a></div></header>
@@ -188,6 +196,13 @@ function render(){
 function soft(){ // re-render without wiping what someone is typing
  const a=document.activeElement;if(a&&/INPUT|SELECT/.test(a.tagName)){dirty=true}else render()}
 document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(dirty&&!(a&&/INPUT|SELECT/.test(a.tagName)))render()},250));
+let lowOpen=false;
+function lowCard(low){
+ const L=[...low].sort((a,b)=>a.qty-b.qty||a.name.localeCompare(b.name)),row=i=>`<div class="lowrow"><span>${esc(i.name)}</span><span class="tag r">${i.qty<=0?'Out of stock':i.qty+' left'}</span></div>`;
+ if(!L.length)return `<div class="card" style="margin-top:14px"><h2>Low stock</h2>All items well stocked. ✅</div>`;
+ const rest=L.slice(5);
+ return `<div class="card" style="margin-top:14px"><h2>Low stock <small style="color:var(--mut);font-weight:600">(${L.length} item${L.length>1?'s':''}, lowest first)</small></h2>${L.slice(0,5).map(row).join('')}${rest.length?`<details class="more" ${lowOpen?'open':''} ontoggle="lowOpen=this.open"><summary>Show ${rest.length} more low-stock item${rest.length>1?'s':''}</summary>${rest.map(row).join('')}</details>`:''}</div>`;
+}
 function dash(){
  const out=SA.reduce((a,s)=>a+Math.max(0,bal(s)),0),tot=SA.reduce((a,s)=>a+s.total,0),low=S.filter(i=>i.qty<=5);
  const od=SA.filter(s=>bal(s)>0&&s.due&&s.due<today()),owing=C.filter(c=>owes(c.id)>0);
@@ -195,7 +210,7 @@ function dash(){
  return `<div class="hero"><small>${greet} 👋 &nbsp;•&nbsp; ${new Date().toDateString()}</small><small style="margin-top:10px">Outstanding credit</small><div class="big">${M(out)}</div><div class="chips"><span>👥 ${owing.length} owing</span><span>⏰ ${od.length} overdue</span><span>📦 ${low.length} low stock</span></div></div>
  <div class="quick"><button onclick="go('New Sale')"><i>🛒</i>New Sale</button><button onclick="go('Repay Debt')"><i>💳</i>Repay</button><button onclick="go('Customers')"><i>👥</i>Customers</button><button onclick="go('Stock')"><i>📦</i>Stock</button></div>
  <div class="grid"><div class="stat">Customers<b>${C.length}</b></div><div class="stat">Total Sales<b>${M(tot)}</b></div><div class="stat">Customers Owing<b>${owing.length}</b></div><div class="stat">Outstanding Credit<b>${M(out)}</b></div><div class="stat">Overdue<b>${od.length}</b></div><div class="stat">Low Stock<b>${low.length}</b></div></div>
- <div class="card" style="margin-top:14px"><h2>Low stock (5 or fewer)</h2>${low.length?low.map(i=>`<span class="tag r">${esc(i.name)}: ${i.qty}</span> `).join(''):'All items well stocked.'}</div>
+ ${lowCard(low)}
  <div class="card"><h2>Overdue payments</h2>${od.length?od.map(s=>`${esc(cust(s.cid).name)} (${esc(cust(s.cid).phone)}) owes <b>${M(bal(s))}</b>, was due ${s.due}<br>`).join(''):'None.'}</div>`;
 }
 function sale(){
